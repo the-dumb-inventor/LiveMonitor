@@ -4,6 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,12 +22,22 @@ class LiveLineChart extends LineChart<Number, Number> {
 
     public LiveLineChart(String name) {
         super(new NumberAxis(0, MAX_DATA_POINTS, 0), new NumberAxis(0, 1024, 0));
-
+        this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        VBox.setVgrow(this, Priority.ALWAYS);
+      ((NumberAxis) getYAxis()).setAutoRanging(true);
         this.series = new XYChart.Series<>();
-
-        setAnimated(false);
-        setHorizontalGridLinesVisible(true);
         getData().add(series);
+        setAnimated(false);
+        setCreateSymbols(false);
+        createSymbolsProperty().set(false);
+        setLegendVisible(false);
+
+        this.series.setName("");
+
+        // After creating the series, set its style
+        series.getNode().setStyle("-fx-stroke-width: 1px; -fx-stroke: darkpurple;");
+
+        setHorizontalGridLinesVisible(true);
         prepareTimeline();
         loadDataFromFileToBuffer(name);
     }
