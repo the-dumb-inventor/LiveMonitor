@@ -17,6 +17,9 @@ class LiveLineChart extends LineChart<Number, Number> {
     private static final int MAX_DATA_POINTS = 1100;
     private int xSeriesData = 0;
     private XYChart.Series<Number, Number> series;
+    private volatile boolean plottingEnabled = true;
+
+
 
     private final Queue<XYChart.Data<Number, Number>> dataBuffer = new LinkedList<>();
 
@@ -55,27 +58,37 @@ class LiveLineChart extends LineChart<Number, Number> {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                synchronized (dataBuffer) {
-                    if (!dataBuffer.isEmpty()) {
-                        int pointsToAdd = 2;  // or any other number based on your needs
-                        for (int i = 0; i < pointsToAdd && !dataBuffer.isEmpty(); i++) {
-                            XYChart.Data<Number, Number> dataPoint = dataBuffer.poll();
-                            series.getData().add(dataPoint);
-                            ((NumberAxis) getXAxis()).setLowerBound(dataPoint.getXValue().intValue() - 1099);
-                            ((NumberAxis) getXAxis()).setUpperBound(dataPoint.getXValue().intValue());
+                if (plottingEnabled) {
+                    synchronized (dataBuffer) {
+                        if (!dataBuffer.isEmpty()) {
+                            int pointsToAdd = 2;  // or any other number based on your needs
+                            for (int i = 0; i < pointsToAdd && !dataBuffer.isEmpty(); i++) {
+                                XYChart.Data<Number, Number> dataPoint = dataBuffer.poll();
+                                series.getData().add(dataPoint);
+                                ((NumberAxis) getXAxis()).setLowerBound(dataPoint.getXValue().intValue() - 1099);
+                                ((NumberAxis) getXAxis()).setUpperBound(dataPoint.getXValue().intValue());
+                            }
+
+                            // If there are more than 500 points plotted, remove the oldest one
+                            if (series.getData().size() > 1100) {
+                                series.getData().remove(0);
+                            }
+
+
                         }
-
-                        // If there are more than 500 points plotted, remove the oldest one
-                        if (series.getData().size() > 1100) {
-                            series.getData().remove(0);
-                        }
-
-
                     }
                 }
             }
         }.start();
     }
+    public void pausePlotting() {
+        this.plottingEnabled = false;
+    }
+
+    public void resumePlotting() {
+        this.plottingEnabled = true;
+    }
+   
     private void loadDataFromFileToBuffer(String filePath) {
         try {
             List<String> lines = Files.readAllLines(Paths.get(filePath));

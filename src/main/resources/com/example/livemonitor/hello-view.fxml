@@ -131,12 +131,12 @@
    <top>
       <ToolBar prefHeight="34.0" prefWidth="600.0" BorderPane.alignment="CENTER">
         <items>
-          <Button maxHeight="40.0" maxWidth="150.0" mnemonicParsing="false" text="START">
+          <Button fx:id="startPlot" maxHeight="40.0" maxWidth="150.0" mnemonicParsing="false" onAction="#startPlot" text="START">
                <padding>
                   <Insets left="30.0" right="36.0" />
                </padding>
             </Button>
-            <Button maxHeight="40.0" maxWidth="150.0" mnemonicParsing="false" text="STOP">
+            <Button fx:id="stopPlot" maxHeight="40.0" maxWidth="150.0" mnemonicParsing="false" onAction="#stopPlot" text="STOP">
                <padding>
                   <Insets left="30.0" right="36.0" />
                </padding>
@@ -177,9 +177,9 @@
       </BorderPane>
    </bottom>
       <center>
-         <VBox prefHeight="200.0" prefWidth="100.0" fillWidth="true" BorderPane.alignment="CENTER">
+         <VBox fillWidth="true" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #99ff #6666ffff;" BorderPane.alignment="CENTER"> 
             <children>
-               <Label maxWidth="80.0" prefHeight="40.0" text="Fill Session" textFill="WHITE">
+               <Label maxWidth="80.0" prefHeight="40.0" text="Chart 1" textFill="#1e687e">
                   <VBox.margin>
                      <Insets bottom="-7.0" left="280.0" />
                   </VBox.margin>
@@ -189,23 +189,9 @@
                </Label>
 
                <!-- Placeholder VBox for fillSessionChart -->
-               <VBox fx:id="chartContainer1" fillWidth="true" style="-fx-background-color: #99ff #6666ffff;">                  <VBox.margin>
-                     <Insets top="5.0" />
-                  </VBox.margin>
-               </VBox>
-
-               <Label maxWidth="101.0" prefHeight="30.0" prefWidth="101.0" text="Clean Session" textFill="WHITE">
+               <VBox fx:id="chartContainer1" maxWidth="660.0" prefHeight="426.0" prefWidth="618.0" style="-fx-background-color: #99ff #6666ffff;">
                   <VBox.margin>
-                     <Insets bottom="-7.0" left="280.0" />
-                  </VBox.margin>
-                  <font>
-                     <Font name="System Bold" size="15.0" />
-                  </font>
-               </Label>
-
-               <!-- Placeholder VBox for cleanSessionChart -->
-               <VBox fx:id="chartContainer2" fillWidth="true" style="-fx-background-color: #99ff #6666ffff;">                  <VBox.margin>
-                     <Insets top="10.0" />
+                     <Insets bottom="69.0" top="10.0" />
                   </VBox.margin>
                </VBox>
 
